@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import CreateBlog from './components/CreateBlog'
+import Toggable from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,6 +11,8 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
+
+  const blogFormRef = useRef() 
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -50,6 +53,7 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     const blog = await blogService.create(blogObject)
     setBlogs([...blogs, blog])
     notifyWith('Blog created correctly')
@@ -60,19 +64,37 @@ const App = () => {
     setUser(null)
   }
 
-  return (
-    <div>
-      <Notification notification={notification} setNotificiation={setNotification}/>
-      { user === null 
-      ? <Login handleLogin={ handleLogin } /> : 
+  const loginForm = () => {
+    return (
+      <Toggable buttonLabel='login'>
+          <Login handleLogin={handleLogin} />
+      </Toggable> 
+    )
+  }
+
+  const blogForm = () => {
+    return (
       <div>
         <p>{ user.name } logged-in <button onClick={handleLogOut}>logout</button></p>
         <h2>blogs</h2>
-        <CreateBlog addBlog={addBlog} /> 
+        <Toggable buttonLabel='New Blog' ref={blogFormRef}>
+          <CreateBlog addBlog={addBlog} /> 
+        </Toggable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
           )}
       </div> 
+    )
+  }
+
+  return (
+    <div>
+      <Notification notification={notification} setNotificiation={setNotification}/>
+      { user === null 
+      ? 
+        loginForm()
+      : 
+        blogForm()
       }
     </div>
   )
