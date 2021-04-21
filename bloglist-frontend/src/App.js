@@ -66,7 +66,7 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <Toggable buttonLabel='login'>
+      <Toggable buttonLabel='login' hideButton='cancel'>
           <Login handleLogin={handleLogin} />
       </Toggable> 
     )
@@ -77,7 +77,7 @@ const App = () => {
       <div>
         <p>{ user.name } logged-in <button onClick={handleLogOut}>logout</button></p>
         <h2>blogs</h2>
-        <Toggable buttonLabel='New Blog' ref={blogFormRef}>
+        <Toggable buttonLabel='New Blog' hideButton='cancel' ref={blogFormRef}>
           <CreateBlog addBlog={addBlog} /> 
         </Toggable>
         {blogs.map(blog =>
