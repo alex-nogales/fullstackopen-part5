@@ -28,9 +28,7 @@ const Blog = ({ blog }) => {
         return true
       }
     }
-
   }
-
 
   return (
     <div style={blogStyle}>
