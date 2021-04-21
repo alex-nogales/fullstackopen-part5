@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 
 const handleLikes = ({ id, likes }) => {
   blogService.update(id, {
-    "likes": likes
+    'likes': likes
   })
 }
 const handleDelete = ({ id }) => {
@@ -12,8 +12,6 @@ const handleDelete = ({ id }) => {
     blogService.remove(id)
   }
 }
-
-
 
 const Blog = ({ blog }) => {
   const blogStyle = {
@@ -24,14 +22,16 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
   const displayDelete = () => {
-    const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogUser'))
-
-    if (loggedUser.username === blog.user.username) {
-      return true
+    if (window.localStorage.getItem('loggedBlogUser')) {
+      const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogUser'))
+      if (loggedUser.username === blog.user.username) {
+        return true
+      }
     }
+
   }
 
-  
+
   return (
     <div style={blogStyle}>
       <h1>Show things test</h1>
@@ -45,18 +45,18 @@ const Blog = ({ blog }) => {
           <span>
             {blog.likes} <button onClick={() => handleLikes({
               likes: blog.likes + 1,
-              id: blog.id 
+              id: blog.id
             }
             )}>likes </button> <br />
           </span>
           {blog.author} <br />
           {
-            displayDelete() ? 
-            <>
-              <button onClick={() => handleDelete({id: blog.id})}>delete</button>
-            </>
-            :
-            <></>
+            displayDelete() ?
+              <>
+                <button onClick={() => handleDelete({ id: blog.id })}>delete</button>
+              </>
+              :
+              <></>
           }
         </Toggable>
       </div>

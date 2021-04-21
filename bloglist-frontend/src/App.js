@@ -12,7 +12,7 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
-  const blogFormRef = useRef() 
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -67,8 +67,8 @@ const App = () => {
   const loginForm = () => {
     return (
       <Toggable buttonLabel='login' hideButton='cancel'>
-          <Login handleLogin={handleLogin} />
-      </Toggable> 
+        <Login handleLogin={handleLogin} />
+      </Toggable>
     )
   }
 
@@ -78,22 +78,22 @@ const App = () => {
         <p>{ user.name } logged-in <button onClick={handleLogOut}>logout</button></p>
         <h2>blogs</h2>
         <Toggable buttonLabel='New Blog' hideButton='cancel' ref={blogFormRef}>
-          <CreateBlog addBlog={addBlog} /> 
+          <CreateBlog addBlog={addBlog} />
         </Toggable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
-          )}
-      </div> 
+        )}
+      </div>
     )
   }
 
   return (
     <div>
       <Notification notification={notification} setNotificiation={setNotification}/>
-      { user === null 
-      ? 
+      { user === null
+        ?
         loginForm()
-      : 
+        :
         blogForm()
       }
     </div>
