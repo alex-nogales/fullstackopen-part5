@@ -32,8 +32,6 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      <h1>Show things test</h1>
-      <button onClick={() => displayDelete()}>show</button>
       <div>
         {blog.title} by {blog.author}
       </div>
