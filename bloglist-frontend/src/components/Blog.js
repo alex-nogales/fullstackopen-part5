@@ -1,19 +1,7 @@
 import React from 'react'
 import Toggable from './Toggable'
-import blogService from '../services/blogs'
 
-const handleLikes = ({ id, likes }) => {
-  blogService.update(id, {
-    'likes': likes
-  })
-}
-const handleDelete = ({ id }) => {
-  if (window.confirm('Really wanna delete this!?')) {
-    blogService.remove(id)
-  }
-}
-
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, handleLikes, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,11 +9,16 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+
   const displayDelete = () => {
     if (window.localStorage.getItem('loggedBlogUser')) {
-      const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogUser'))
-      if (loggedUser.username === blog.user.username) {
-        return true
+      if (blog.user !== undefined ) {
+        const username = blog.user.username
+        if (user.username === username) {
+          return true
+        }
+      } else {
+        return false
       }
     }
   }
@@ -42,14 +35,14 @@ const Blog = ({ blog }) => {
             {blog.likes} <button onClick={() => handleLikes({
               likes: blog.likes + 1,
               id: blog.id
-            }
-            )}>likes </button> <br />
+            })}>likes </button> <br />
           </span>
           {blog.author} <br />
           {
             displayDelete() ?
               <>
-                <button onClick={() => handleDelete({ id: blog.id })}>delete</button>
+                <p>added by {blog.user.username} </p>
+                <button onClick={() => deleteBlog(blog.id)}>delete</button>
               </>
               :
               <></>
