@@ -25,12 +25,17 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    // Using an IIFE to use async function in useEffect
     (async function getAll() {
       const blogs = await blogService.getAll()
       setBlogs(blogs)
     })()
   }, [])
+
+
+  const notifyWith = (message, type='success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification(null), 3000)
+  }
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
@@ -39,11 +44,6 @@ const App = () => {
     const updatedBlogs = await blogService.getAll()
     setBlogs(updatedBlogs)
     notifyWith('Blog created correctly')
-  }
-
-  const notifyWith = (message, type='success') => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification(null), 2000)
   }
 
   const handleLogin = async (username, password) => {
@@ -71,6 +71,7 @@ const App = () => {
     const updatedBlog = await blogService.update(id, { 'likes': likes })
 
     setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+    notifyWith('Correctly liked')
   }
 
   const deleteBlog = async id => {
@@ -80,6 +81,7 @@ const App = () => {
     }
 
     setBlogs(blogs.filter(blog => blog.id !== id ))
+    notifyWith('Blog deleted correctly')
   }
 
   return (
@@ -93,6 +95,7 @@ const App = () => {
         :
         <div>
           <h1>Blogs</h1>
+          <Notification notification={notification} setNotificiation={setNotification}/>
           <span className="user">
             {user.name} is logged in <button onClick={handleLogOut}> logout </button>
           </span>
